@@ -21,18 +21,21 @@ object Application {
     ZIO[Console with PhrasesProvider with QueryService[T] with ResponseParser[T] with TranslationRepo, Throwable, Unit]
 
   def program[T: Tag]: Application[T] =
+    //@formatter:off
     for {
       phrases <- PhrasesProvider.provide()
       _ <- Stream
         .fromIterable(phrases)
-        .foreach(phrase =>
-          for {
-            _ <- putStrLn(s"Starting: $phrase")
-            result <- QueryService.query[T](phrase)
-            translations <- ResponseParser.parse[T](phrase, result)
-            _ <- Stream.fromIterable(translations).foreach(TranslationRepo.persist(_) *> Task.unit)
-            _ <- putStrLn(s"Done: $phrase\n")
-          } yield ()
+        .foreach(
+          phrase =>
+            for {
+              _ <- putStrLn(s"Starting: $phrase")
+              result <- QueryService.query[T](phrase)
+              translations <- ResponseParser.parse[T](phrase, result)
+              _ <- TranslationRepo.persist(translations)
+              _ <- putStrLn(s"Done: $phrase\n")
+            } yield ()
         )
     } yield ()
+  //@formatter:on
 }

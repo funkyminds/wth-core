@@ -20,7 +20,7 @@ object FileBasedPhrasesProviderTest extends DefaultRunnableSpec {
     suite("FileBasedPhrasesProvider") {
       testM("should read file from test resources") {
         for {
-          lines <- PhrasesProvider.provide
+          lines <- PhrasesProvider.provide()
         } yield assert(lines)(equalTo(Seq("line1", "line 2", "line  3")))
       }.provideCustomLayer(dep)
     }
