@@ -1,6 +1,6 @@
 # wth-core
-##wth - word trainer helper
-####This project is under heavy development.
+## wth - word trainer helper
+#### This project is under heavy development.
 
 wth is a project that helps to automate process of flashcards preparation.
 
